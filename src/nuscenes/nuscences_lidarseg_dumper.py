@@ -293,7 +293,8 @@ class NuScenesLidarsegDumper(DatasetDumper):
         data = bind.actor.data.content.copy() # FORMAT: [x, y, z, semantic_id, object_id]
         data[:, 3] = 1  # intensity override
         data[:, 4] = 0  # ring index override
-        data.tofile(path)
+        data_float32 = data.astype(np.float32)  # change the data format from float64 to float32
+        data_float32.tofile(path)
         self.logger.debug(f"Dumped '{bind.channel}' lidar to {path}, points: {data.shape[0]}")
         
         # 写入 sample_data 表和 ego_pose 表, 加锁以保证操作原子化
@@ -345,6 +346,11 @@ class NuScenesLidarsegDumper(DatasetDumper):
         seg_id[index_ego] = self.MAPPING_SEG_NUSCENES_EGO
         
         # 写入数据
+<<<<<<< HEAD
+        seg_id = seg_id.astype('uint8')  # 标签的格式设置为 uint8
+=======
+        seg_id = seg_id.astype('uint8')
+>>>>>>> 5fafa47... change the lidar data from float64 to float32
         seg_id.tofile(path_lidarseg)
         self.logger.debug(f"Dumped '{bind.channel}' lidarseg to {path_lidarseg}, points: {seg_id.shape[0]}")
 
